@@ -123,7 +123,7 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           "$SDKMANAGER" --sdk_root="$ANDROID_HOME" "platform-tools" "ndk;27.2.12479018"
           # API 37 is a preview platform in this project configuration.
-          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --channel=3 "platforms;android-37"
+          "$SDKMANAGER" --sdk_root="$ANDROID_HOME" --channel=3 "platforms;android-37.2"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
