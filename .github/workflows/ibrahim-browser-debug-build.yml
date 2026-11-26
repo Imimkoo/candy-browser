@@ -75,7 +75,7 @@ jobs:
           if extra:
               raise SystemExit("Unknown Arabic resource keys: " + ", ".join(extra))
 
-          placeholder = re.compile(r"%(?:\\d+\\$)?[sdif]")
+          placeholder = re.compile(r"%(?:\d+\$)?[sdif]")
           for name, source in base.items():
               target = arabic.get(name)
               if target is None:
