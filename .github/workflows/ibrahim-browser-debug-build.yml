@@ -93,8 +93,14 @@ jobs:
                   for item in source:
                       quantity = item.attrib.get("quantity")
                       target_item = next((x for x in target if x.attrib.get("quantity") == quantity), None)
-                      if target_item is not None and sorted(placeholder.findall("".join(item.itertext()))) != sorted(placeholder.findall("".join(target_item.itertext()))):
-                          raise SystemExit(f"Plural placeholder mismatch: {name}/{quantity}")
+                      if target_item is not None:
+                          source_placeholders = placeholder.findall("".join(item.itertext()))
+                          target_placeholders = placeholder.findall("".join(target_item.itertext()))
+                          # Arabic singular wording may naturally omit the numeric placeholder.
+                          if quantity == "other" and sorted(source_placeholders) != sorted(target_placeholders):
+                              raise SystemExit(f"Plural placeholder mismatch: {name}/{quantity}")
+                          if any(target_placeholders.count(value) > source_placeholders.count(value) for value in set(target_placeholders)):
+                              raise SystemExit(f"Unexpected plural placeholder: {name}/{quantity}")
               elif source.tag in {"string-array", "integer-array"}:
                   if len(source) != len(target):
                       raise SystemExit(f"Array item count mismatch: {name}")
