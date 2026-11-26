@@ -1,0 +1,49 @@
+name: Ibrahim Browser Android debug build
+
+on:
+  push:
+    branches:
+      - ibrahim-browser-customization
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ibrahim-browser-debug-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build installable Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform and NDK
+        run: sdkmanager "platforms;android-37" "ndk;27.2.12479018"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Ibrahim Browser
+        run: ./gradlew --no-daemon assembleFullDebug
+
+      - name: Publish debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ibrahim-Browser-Android-debug
+          path: app/build/outputs/apk/full/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
