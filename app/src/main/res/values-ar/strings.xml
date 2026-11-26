@@ -1623,4 +1623,39 @@
     <string name="settings_auto_create_link_stacks_title">إنشاء مجموعات تلقائيًا للروابط</string>
     <string name="settings_auto_create_link_stacks_summary">عند فتح رابط في علامة تبويب جديدة من علامة تبويب غير مصنفة ضمن مجموعة، ضع العلامتين في مجموعة جديدة. هذا الخيار متوقف افتراضيًا.</string>
 
+
+    <!-- Local semantic page map -->
+    <string name="constellations_title">خريطة اهتمامات التصفح</string>
+    <string name="constellations_profile">خريطة الملف الشخصي %1$s</string>
+    <string name="constellations_description">اكتشف كيف ترتبط الصفحات التي زرتها حسب الموضوع. يحفظ المتصفح مقتطفًا قصيرًا ويكتشف الروابط الموضوعية على هذا الجهاز. لكل ملف شخصي خريطته الخاصة، ولا تُدرج الصفحات الخاصة.</string>
+    <string name="constellations_enable">تفعيل لهذا الملف الشخصي</string>
+    <string name="constellations_disable">تعطيل هذه الخريطة وحذفها</string>
+    <string name="constellations_download_description">نزّل النموذج متعدد اللغات (نحو 138 ميجابايت) من Hugging Face مرة واحدة. يظل محتوى الصفحات على هذا الجهاز، ويعمل النموذج دون اتصال بعد تنزيله.</string>
+    <string name="constellations_download_model">تنزيل النموذج</string>
+    <string name="constellations_downloading">جارٍ تنزيل النموذج: %1$d%%</string>
+    <string name="constellations_indexing">جارٍ ربط صفحاتك…</string>
+    <string name="constellations_empty">تنمو خريطتك كلما زرت صفحات مقروءة في هذا الملف الشخصي. لا يجلب المتصفح سجل التصفح السابق في الخلفية.</string>
+    <string name="constellations_error">تعذّر تحديث خريطتك. تحقق من مساحة التخزين المتاحة ثم حاول مجددًا. يتطلب تنزيل النموذج اتصالًا بالإنترنت أيضًا.</string>
+    <string name="constellations_graph_hint">قرّب إصبعين للتكبير واسحب للاستكشاف. توضّح الروابط التشابه في الموضوع، لا الاتفاق في الرأي. اختر صفحة أدناه لاستكشاف الصفحات المرتبطة بها.</string>
+    <string name="constellations_pages">صفحات هذا الملف الشخصي</string>
+    <string name="constellations_related_pages">صفحات ذات صلة</string>
+    <string name="constellations_no_connections">لا توجد صفحات متقاربة في الموضوع حتى الآن.</string>
+    <string name="constellations_connection">تشابه موضوعي بنسبة %1$d%%</string>
+    <string name="constellations_page_count">%1$d صفحة</string>
+    <string name="constellations_search">البحث في هذه الخريطة</string>
+    <string name="constellations_search_no_results">لا توجد صفحات مطابقة في هذا الملف الشخصي.</string>
+    <string name="constellations_search_position">%1$d من %2$d نتائج</string>
+    <string name="status_bar_scroll_accessibility_service_label">التمرير من شريط الحالة في متصفح إبراهيم</string>
+    <string name="status_bar_scroll_accessibility_service_description">يتيح الضغط في منتصف شريط الحالة تمرير صفحة المتصفح الحالية إلى أعلاها. لا يقرأ المتصفح محتوى النوافذ.</string>
+    <string name="status_bar_scroll_target_description">تمرير الصفحة الحالية إلى الأعلى</string>
+    <string name="settings_status_bar_scroll_title">اضغط على شريط الحالة للانتقال إلى أعلى الصفحة</string>
+    <string name="settings_status_bar_scroll_summary">يضيف منطقة لمس غير مرئية في منتصف شريط حالة Android. يتطلب ذلك منح متصفح إبراهيم إذن إمكانية الوصول.</string>
+    <string name="settings_status_bar_scroll_width_title">عرض منطقة اللمس</string>
+    <string name="settings_status_bar_scroll_width_summary">%1$d%% من عرض الشاشة</string>
+    <string name="settings_status_bar_scroll_accessibility_dialog_title">تفعيل إذن إمكانية الوصول لمتصفح إبراهيم؟</string>
+    <string name="settings_status_bar_scroll_accessibility_dialog_message">يستخدم المتصفح خدمة إمكانية الوصول في Android لمعرفة ما إذا كان في المقدمة، وذلك من خلال أسماء الحزم في أحداث النوافذ. تتيح لك الخدمة الضغط على شريط الحالة للانتقال إلى أعلى الصفحة، والسحب لفتح الإشعارات أو الإعدادات السريعة. لا تقرأ الخدمة محتوى النوافذ ولا تشارك هذه البيانات. وافق للانتقال إلى إعدادات إمكانية الوصول في Android وتفعيل ميزة التمرير من شريط الحالة.</string>
+    <string name="settings_status_bar_scroll_accessibility_open">موافقة وفتح الإعدادات</string>
+    <string name="settings_status_bar_scroll_enable_for_domain">تفعيل التمرير من شريط الحالة لهذا الموقع</string>
+    <string name="settings_status_bar_scroll_disable_for_domain">تعطيل التمرير من شريط الحالة لهذا الموقع</string>
+
 </resources>
