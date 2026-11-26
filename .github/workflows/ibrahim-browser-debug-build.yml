@@ -15,9 +15,9 @@ concurrency:
 
 jobs:
   build:
-    name: Build installable Android APK
+    name: Validate Arabic resources and build APK
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 75
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -28,6 +28,86 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Validate Arabic Android resources
+        run: |
+          python - <<'PY'
+          import re
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          base_path = Path("app/src/main/res/values/strings.xml")
+          arabic_path = Path("app/src/main/res/values-ar/strings.xml")
+          base_root = ET.parse(base_path).getroot()
+          arabic_root = ET.parse(arabic_path).getroot()
+          resource_tags = {"string", "plurals", "string-array", "integer-array"}
+
+          def index(root, path):
+              entries = {}
+              duplicates = []
+              for element in root:
+                  if element.tag not in resource_tags:
+                      continue
+                  name = element.attrib.get("name")
+                  if not name:
+                      raise SystemExit(f"Resource without a name in {path}")
+                  if name in entries:
+                      duplicates.append(name)
+                  entries[name] = element
+              if duplicates:
+                  raise SystemExit(f"Duplicate resource names in {path}: {sorted(set(duplicates))}")
+              return entries
+
+          base = index(base_root, base_path)
+          arabic = index(arabic_root, arabic_path)
+          missing = [
+              name for name, element in base.items()
+              if element.attrib.get("translatable", "true") != "false"
+              and name not in arabic
+          ]
+          extra = sorted(set(arabic) - set(base))
+          if missing:
+              raise SystemExit("Missing Arabic resources: " + ", ".join(sorted(missing)))
+          if extra:
+              raise SystemExit("Unknown Arabic resource keys: " + ", ".join(extra))
+
+          placeholder = re.compile(r"%(?:\\d+\\$)?[sdif]")
+          for name, source in base.items():
+              target = arabic.get(name)
+              if target is None:
+                  continue
+              if source.tag != target.tag:
+                  raise SystemExit(f"Resource type mismatch: {name}")
+              if source.tag == "string":
+                  if sorted(placeholder.findall("".join(source.itertext()))) != sorted(placeholder.findall("".join(target.itertext()))):
+                      raise SystemExit(f"Formatting placeholder mismatch: {name}")
+              elif source.tag == "plurals":
+                  source_quantities = {item.attrib.get("quantity") for item in source}
+                  target_quantities = {item.attrib.get("quantity") for item in target}
+                  if not source_quantities.issubset(target_quantities) or "other" not in target_quantities:
+                      raise SystemExit(f"Plural quantity mismatch: {name}")
+                  for item in source:
+                      quantity = item.attrib.get("quantity")
+                      target_item = next((x for x in target if x.attrib.get("quantity") == quantity), None)
+                      if target_item is not None and sorted(placeholder.findall("".join(item.itertext()))) != sorted(placeholder.findall("".join(target_item.itertext()))):
+                          raise SystemExit(f"Plural placeholder mismatch: {name}/{quantity}")
+              elif source.tag in {"string-array", "integer-array"}:
+                  if len(source) != len(target):
+                      raise SystemExit(f"Array item count mismatch: {name}")
+
+          locale_file = Path("app/src/main/res/xml/locales_config.xml").read_text()
+          manifest_file = Path("app/src/main/AndroidManifest.xml").read_text()
+          if 'android:name="ar"' not in locale_file:
+              raise SystemExit("Arabic locale is not registered in locales_config.xml")
+          if 'android:supportsRtl="true"' not in manifest_file:
+              raise SystemExit("Android RTL support is not enabled in the manifest")
+          print(f"Arabic resources validated: {len(arabic)} keys; all translatable base keys covered.")
+          PY
+
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
@@ -37,8 +117,8 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build Ibrahim Browser
-        run: ./gradlew --no-daemon assembleFullDebug
+      - name: Build and test Ibrahim Browser
+        run: ./gradlew --no-daemon assembleFullDebug testFullDebugUnitTest
 
       - name: Publish debug APK
         uses: actions/upload-artifact@v4
